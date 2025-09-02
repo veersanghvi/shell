@@ -135,7 +135,7 @@
         <div id="terminal" style="display: none;">
             <div id="output"></div>
             <div class="input-line">
-                <span class="prompt" id="prompt">user@portfolio:~$</span>
+                <span class="prompt" id="prompt">guest@system:~$</span>
                 <input type="text" id="command-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
                 <span class="cursor"></span>
             </div>
@@ -207,21 +207,21 @@ motto: "sudo make it work"
                 github: "https://github.com/veersanghvi",
                 linkedin: "https://linkedin.com/in/veer-sanghvii",
             },
-skillsForScan: [
-    { port: 22, service: 'SSH', description: 'Secure Shell, Linux Hardening & Bash Scripting' },
-    { port: 80, service: 'HTTP', description: 'Web Security, OWASP Top 10, Exploit Testing' },
-    { port: 443, service: 'HTTPS', description: 'Encryption, SSL/TLS, Network Security' },
-    { port: 135, service: 'RPC', description: 'Active Directory, Windows Security' },
-    { port: 3389, service: 'RDP', description: 'Red Teaming, Privilege Escalation Labs' },
-    { port: 5601, service: 'Kibana', description: 'SIEM Analysis with ELK Stack' },
-    { port: 8000, service: 'Splunk', description: 'Security Monitoring, Log Analysis' },
-    { port: 3306, service: 'MySQL', description: 'Data Security & Access Control (not dev focus)' },
-    { port: 5432, service: 'PostgreSQL', description: 'Database Security & Hardening' },
-    { port: 8080, service: 'Proxy', description: 'Burp Suite, Web Proxies, Pentesting' },
-    { port: 10250, service: 'Kubelet', description: 'Cloud Security, Kubernetes, Containers' },
-    { port: 1337, service: 'CTF', description: 'Capture the Flag, Exploit Development Practice' },
-    { port: 31337, service: 'Backdoor', description: 'Red Teaming & Adversary Simulation' },
-],
+            skillsForScan: [
+                { port: 22, service: 'SSH', description: 'Secure Shell, Linux Hardening & Bash Scripting' },
+                { port: 80, service: 'HTTP', description: 'Web Security, Vulnerability Assessment' },
+                { port: 443, service: 'HTTPS', description: 'Encryption, TLS, Network Defense' },
+                { port: 8080, service: 'Proxy', description: 'Burp Suite, OWASP Testing, Web Proxies' },
+                { port: 3389, service: 'RDP', description: 'Red Teaming & Lateral Movement Tactics' },
+                { port: 9200, service: 'Elasticsearch', description: 'Log Analysis & Incident Response' },
+                { port: 5601, service: 'Kibana', description: 'Visualization & Threat Hunting' },
+                { port: 9997, service: 'Splunk-Forwarder', description: 'SIEM, Log Monitoring, Threat Detection' },
+                { port: 5000, service: 'Cloud', description: 'AWS | Azure | GCP Security & IAM Hardening' },
+                { port: 4444, service: 'Metasploit', description: 'Exploitation Framework & CTF Practice' },
+                { port: 1337, service: 'CTF', description: 'Capture the Flag Challenges & Problem Solving' },
+                { port: 1999, service: 'Forensics', description: 'Disk Imaging, Memory Analysis, File Carving' },
+                { port: 7777, service: 'Custom', description: 'Threat Simulation & Adversary Emulation' },
+            ],
             projects: {
                 "shell.js": {
                     description: "This very terminal you're using! Built with vanilla JS, HTML, and CSS to be lightweight and fast.",
@@ -387,10 +387,17 @@ Congratulations, elite hacker! You found the secret.
                 case 'scan':
                     await type("Starting nmap scan against localhost...");
                     await new Promise(r => setTimeout(r, 1000));
-                    await type("PORT\tSTATE\tSERVICE\t\tDESCRIPTION");
+                    
+                    const header = 'PORT'.padEnd(10) + 'STATE'.padEnd(10) + 'SERVICE'.padEnd(20) + 'DESCRIPTION';
+                    await type(header);
+                    
                     for (const skill of portfolioData.skillsForScan) {
-                         await type(`${skill.port}/tcp\topen\t${skill.service}\t\t${skill.description}`);
-                         await new Promise(r => setTimeout(r, 50));
+                        const portStr = `${skill.port}/tcp`.padEnd(10);
+                        const stateStr = 'open'.padEnd(10);
+                        const serviceStr = skill.service.padEnd(20);
+                        const line = `${portStr}${stateStr}${serviceStr}${skill.description}`;
+                        await type(line);
+                        await new Promise(r => setTimeout(r, 50));
                     }
                     break;
                 case 'social':
@@ -508,7 +515,7 @@ Congratulations, elite hacker! You found the secret.
                         await type("Root privileges granted. Handle with care.");
                     } else if (isAdmin) {
                         isAdmin = false;
-                        promptEl.textContent = 'user@portfolio:~$';
+                        promptEl.textContent = 'guest@system:~$';
                         await type("Root privileges relinquished.");
                     } else {
                         await type("sudo: permission denied");
@@ -525,7 +532,8 @@ Congratulations, elite hacker! You found the secret.
         // This new listener fixes the cursor position by resizing the input field
         input.addEventListener('input', () => {
             const minWidth = 1;
-            const newWidth = Math.max(minWidth, input.value.length) + 1;
+            // Removed the '+ 1' for a tighter cursor fit
+            const newWidth = Math.max(minWidth, input.value.length);
             input.style.width = `${newWidth}ch`;
         });
 
