@@ -13,8 +13,8 @@
             --text-color: #00ff41;
             --prompt-color: #00ff41;
             --font-family: 'Courier New', Courier, monospace;
-            --font-size: 1.1rem;
-            --mobile-font-size: 1rem;
+            --font-size: 1.0rem; /* Slightly reduced for better overall fit */
+            --mobile-font-size: 0.9rem; /* Made mobile font smaller for less clutter */
         }
 
         /* Basic setup and resets */
@@ -30,6 +30,7 @@
             background-color: var(--background-color);
             color: var(--text-color);
             font-family: var(--font-family);
+            font-size: var(--font-size);
             overflow: hidden; /* Hide scrollbars for the main body */
         }
 
@@ -60,6 +61,7 @@
         .output-line {
             white-space: pre-wrap;
             margin: 0;
+            word-break: break-word; /* Ensures long strings don't overflow */
         }
         
         .output-line a {
@@ -113,8 +115,11 @@
 
         /* Responsive adjustments */
         @media (max-width: 600px) {
-            #terminal, #boot-sequence {
+            body {
                 font-size: var(--mobile-font-size);
+            }
+            #terminal, #boot-sequence {
+                padding: 10px; /* Reduced padding on small screens */
             }
         }
     </style>
@@ -181,7 +186,7 @@
         // ===================================================================================
 
         const portfolioData = {
-            name: "Hi, I'm Veer Sanghvi",
+            name: "hey, im Veer",
             initialBanner: `
 +-------------------------------------------------+
 |  >_ guest session initialized                   |
@@ -190,8 +195,11 @@
 |  Experimental features enabled                  |
 +-------------------------------------------------+
 `,
-            role: "Cybersecurity Analyst & Developer",
-            tagline: "Securing the digital world, one line of code at a time.",
+            role: "a bug fixer & a bug creator",
+            tagline: `
+interests: hacking, coding, caffeine
+motto: "sudo make it work"
+`,
             email: "veer.sanghvi@example.com", 
             resumeLink: "your_resume.pdf", 
             social: {
@@ -550,7 +558,7 @@ Congratulations, elite hacker! You found the secret.
                     await type("Asking the AI for a project idea...");
                     const suggestionPrompt = `Suggest a unique and impressive portfolio project for a ${portfolioData.role}. The project should be achievable but demonstrate key skills. Provide a short concept and key features.`;
                     const suggestion = await callGemini(suggestionPrompt);
-                    await type(suggestion);
+await type(suggestion);
                     break;
                 case '':
                     break;
