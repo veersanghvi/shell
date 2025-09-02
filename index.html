@@ -201,20 +201,27 @@
 interests: hacking, coding, caffeine
 motto: "sudo make it work"
 `,
-            email: "veer.sanghvi@example.com", 
+            email: "veersanghvi00@gmail.com", 
             resumeLink: "your_resume.pdf", 
             social: {
                 github: "https://github.com/veersanghvi",
                 linkedin: "https://linkedin.com/in/veer-sanghvii",
             },
-            skillsForScan: [
-                { port: 22, service: 'SSH', description: 'Secure Shell & Bash Scripting' },
-                { port: 80, service: 'HTTP', description: 'Web Development (HTML/CSS/JS)' },
-                { port: 443, service: 'HTTPS', description: 'Network Security & Encryption' },
-                { port: 3306, service: 'MySQL', description: 'Database Management' },
-                { port: 5432, service: 'PostgreSQL', description: 'Advanced Database Skills' },
-                { port: 8080, service: 'Proxy', description: 'Burp Suite & Web Proxies' },
-            ],
+skillsForScan: [
+    { port: 22, service: 'SSH', description: 'Secure Shell, Linux Hardening & Bash Scripting' },
+    { port: 80, service: 'HTTP', description: 'Web Security, OWASP Top 10, Exploit Testing' },
+    { port: 443, service: 'HTTPS', description: 'Encryption, SSL/TLS, Network Security' },
+    { port: 135, service: 'RPC', description: 'Active Directory, Windows Security' },
+    { port: 3389, service: 'RDP', description: 'Red Teaming, Privilege Escalation Labs' },
+    { port: 5601, service: 'Kibana', description: 'SIEM Analysis with ELK Stack' },
+    { port: 8000, service: 'Splunk', description: 'Security Monitoring, Log Analysis' },
+    { port: 3306, service: 'MySQL', description: 'Data Security & Access Control (not dev focus)' },
+    { port: 5432, service: 'PostgreSQL', description: 'Database Security & Hardening' },
+    { port: 8080, service: 'Proxy', description: 'Burp Suite, Web Proxies, Pentesting' },
+    { port: 10250, service: 'Kubelet', description: 'Cloud Security, Kubernetes, Containers' },
+    { port: 1337, service: 'CTF', description: 'Capture the Flag, Exploit Development Practice' },
+    { port: 31337, service: 'Backdoor', description: 'Red Teaming & Adversary Simulation' },
+],
             projects: {
                 "shell.js": {
                     description: "This very terminal you're using! Built with vanilla JS, HTML, and CSS to be lightweight and fast.",
