@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veer | Portfolio</title>
+    <meta name="description" content="A terminal-style personal portfolio website.">
+
+    <!-- Embedded CSS for styling -->
+    <style>
+        :root {
+            --background-color: #0d0d0d;
+            --text-color: #00ff41;
+            --prompt-color: #00ff41;
+            --font-family: 'Courier New', Courier, monospace;
+            --font-size: 1.1rem;
+            --mobile-font-size: 1rem;
+        }
+
+        /* Basic setup and resets */
+        * {
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            overflow: hidden; /* Hide scrollbars for the main body */
+        }
+
+        /* Terminal container */
+        #terminal-container {
+            height: 100vh;
+            width: 100%;
+            overflow-y: auto; /* Allow scrolling only within the terminal */
+        }
+        
+        #terminal {
+            padding: 15px;
+            word-wrap: break-word;
+            min-height: 100%;
+        }
+
+        /* Boot sequence styling */
+        #boot-sequence {
+             padding: 15px;
+        }
+
+        /* Output area styling */
+        #output {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output-line {
+            white-space: pre-wrap;
+            margin: 0;
+        }
+        
+        .output-line a {
+            color: var(--text-color);
+            text-decoration: underline;
+        }
+        
+        .output-line a:hover {
+            color: var(--background-color);
+            background-color: var(--text-color);
+        }
+
+        /* Input line styling */
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .prompt {
+            color: var(--prompt-color);
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+        
+        #command-input {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-family: var(--font-family);
+            font-size: inherit;
+            flex-grow: 1;
+            outline: none;
+            caret-color: transparent; /* Hides the default cursor */
+        }
+
+        /* Custom blinking cursor */
+        .cursor {
+            width: 10px;
+            height: 1.2em;
+            background-color: var(--text-color);
+            display: inline-block;
+            animation: blink 1s steps(1) infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            #terminal, #boot-sequence {
+                font-size: var(--mobile-font-size);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container for the whole terminal experience -->
+    <div id="terminal-container" onclick="document.getElementById('command-input')?.focus();">
+        <!-- Initially shows the boot sequence -->
+        <div id="boot-sequence"></div>
+        <!-- The main terminal, hidden initially -->
+        <div id="terminal" style="display: none;">
+            <div id="output"></div>
+            <div class="input-line">
+                <span class="prompt" id="prompt">user@portfolio:~$</span>
+                <input type="text" id="command-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
+                <span class="cursor"></span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Embedded JavaScript for functionality -->
+    <script>
+        // ===================================================================================
+        // OFFLINE ASCII BANNER GENERATOR
+        // A simple, self-contained generator to avoid all network errors.
+        // ===================================================================================
+        const simpleAsciiArt = {
+            'A': ["  #  ", " # # ", "#####", "#   #", "#   #"], 'B': ["#### ", "#   #", "#### ", "#   #", "#### "],
+            'C': [" ####", "#    ", "#    ", "#    ", " ####"], 'D': ["#### ", "#   #", "#   #", "#   #", "#### "],
+            'E': ["#####", "#    ", "###  ", "#    ", "#####"], 'F': ["#####", "#    ", "###  ", "#    ", "#    "],
+            'G': [" ####", "#    ", "# ###", "#   #", " ####"], 'H': ["#   #", "#   #", "#####", "#   #", "#   #"],
+            'I': ["#####", "  #  ", "  #  ", "  #  ", "#####"], 'J': ["#####", "   # ", "   # ", "#  # ", " ##  "],
+            'K': ["#  # ", "# #  ", "##   ", "# #  ", "#  # "], 'L': ["#    ", "#    ", "#    ", "#    ", "#####"],
+            'M': ["#   #", "## ##", "# # #", "#   #", "#   #"], 'N': ["#   #", "##  #", "# # #", "#  ##", "#   #"],
+            'O': [" ### ", "#   #", "#   #", "#   #", " ### "], 'P': ["#### ", "#   #", "#### ", "#    ", "#    "],
+            'Q': [" ### ", "#   #", "# # #", "#  # ", " ### #"],'R': ["#### ", "#   #", "#### ", "#  # ", "#   #"],
+            'S': [" ####", "#    ", " ### ", "    #", "#### "], 'T': ["#####", "  #  ", "  #  ", "  #  ", "  #  "],
+            'U': ["#   #", "#   #", "#   #", "#   #", " ### "], 'V': ["#   #", "#   #", " # # ", " # # ", "  #  "],
+            'W': ["#   #", "#   #", "# # #", "## ##", "#   #"], 'X': ["#   #", " # # ", "  #  ", " # # ", "#   #"],
+            'Y': ["#   #", " # # ", "  #  ", "  #  ", "  #  "], 'Z': ["#####", "   # ", "  #  ", " #   ", "#####"],
+            '1': ["  #  ", " ##  ", "  #  ", "  #  ", " ### "], '2': [" ### ", "#   #", "  #  ", " #   ", "#####"],
+            '3': ["#### ", "    #", " ### ", "    #", "#### "], '4': ["#  # ", "#  # ", "#####", "   # ", "   # "],
+            '5': ["#####", "#    ", "#### ", "    #", "#### "], '6': [" ### ", "#    ", "#### ", "#   #", " ### "],
+            '7': ["#####", "   # ", "  #  ", " #   ", "#    "], '8': [" ### ", "#   #", " ### ", "#   #", " ### "],
+            '9': [" ### ", "#   #", " ####", "    #", " ### "], '0': [" ### ", "#   #", "# # #", "#   #", " ### "],
+            ' ': ["     ", "     ", "     ", "     ", "     "], '.': ["     ", "     ", "     ", " ### ", " ### "],
+            '!': [" ### ", " ### ", " ### ", "     ", " ### "], '?': [" ### ", "#   #", "  ## ", "     ", "  #  "],
+        };
+        const generateBanner = (text) => {
+            const charHeight = 5;
+            const output = Array(charHeight).fill('');
+            for (const char of text.toUpperCase()) {
+                const art = simpleAsciiArt[char] || simpleAsciiArt['?'];
+                for (let i = 0; i < charHeight; i++) {
+                    output[i] += art[i] + ' ';
+                }
+            }
+            return output.join('\n');
+        };
+
+        // ===================================================================================
+        // CUSTOMIZE YOUR PORTFOLIO HERE
+        // ===================================================================================
+
+        const portfolioData = {
+            name: "Hi, I'm Veer Sanghvi",
+            initialBanner: `
++-------------------------------------------------+
+|  >_ guest session initialized                   |
+|                                                 |
+|  Access: read-only                              |
+|  Experimental features enabled                  |
++-------------------------------------------------+
+`,
+            role: "Cybersecurity Analyst & Developer",
+            tagline: "Securing the digital world, one line of code at a time.",
+            email: "veer.sanghvi@example.com", 
+            resumeLink: "your_resume.pdf", 
+            social: {
+                github: "https://github.com/veersanghvi",
+                linkedin: "https://linkedin.com/in/veer-sanghvii",
+            },
+            skillsForScan: [
+                { port: 22, service: 'SSH', description: 'Secure Shell & Bash Scripting' },
+                { port: 80, service: 'HTTP', description: 'Web Development (HTML/CSS/JS)' },
+                { port: 443, service: 'HTTPS', description: 'Network Security & Encryption' },
+                { port: 3306, service: 'MySQL', description: 'Database Management' },
+                { port: 5432, service: 'PostgreSQL', description: 'Advanced Database Skills' },
+                { port: 8080, service: 'Proxy', description: 'Burp Suite & Web Proxies' },
+            ],
+            projects: {
+                "portfolio-v1.js": {
+                    description: "This very terminal you're using! Built with vanilla JS, HTML, and CSS to be lightweight and fast.",
+                    link: "https://github.com/veersanghvi/terminal-portfolio"
+                },
+                "secure-api.py": {
+                    description: "A Python-based REST API with JWT authentication and rate limiting for a secure user management system.",
+                    link: "https://github.com/veersanghvi/secure-api"
+                },
+                "log-analyzer.sh": {
+                    description: "A bash script that parses server logs to detect and report potential intrusion attempts.",
+                    link: "https://github.com/veersanghvi/log-analyzer"
+                }
+            },
+            motd: [
+                "The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room with armed guards - and even then I have my doubts. - Gene Spafford",
+                "Privacy is not an option, and it shouldn't be the price we accept for just getting on the Internet. - Gary Kovacs",
+                "Fun fact: The first computer virus, 'Creeper', was created in 1971 and was designed to move between TENEX terminals, displaying the message 'I'm the creeper, catch me if you can!'"
+            ],
+            secret: {
+                hint: "Sometimes, the oldest tricks are the best. Try looking for something that is both up and down, but never moves.",
+                puzzleCommand: "konamicode",
+                solution: `
+  _  _  __  _  _  ____  __  __ _  ____ 
+ ( \\/ )(  )( \\/ )(  _ \\(  )(  ( \\(  __)
+  )  (  )( / \\/ \\ ) __/ )( /    / ) _) 
+ (_/\\_)(__)\\_)(_/(__)  (__)\\_)__)(____)
+
+Congratulations, elite hacker! You found the secret.
+`
+            },
+            themes: {
+                classic: {
+                    '--background-color': '#0d0d0d',
+                    '--text-color': '#00ff41',
+                    '--prompt-color': '#00ff41',
+                },
+                amber: {
+                    '--background-color': '#1a1a1a',
+                    '--text-color': '#FFBF00',
+                    '--prompt-color': '#FFBF00',
+                },
+                retro: {
+                    '--background-color': '#0000A0',
+                    '--text-color': '#FFFFFF',
+                    '--prompt-color': '#FFFFFF',
+                }
+            }
+        };
+
+      const bootLog = [
+    { text: "Booting system...", delay: 100 },
+    { text: "Loading kernel modules...", delay: 400 },
+    { text: "[ OK ] Initialized entropy pool", delay: 300 },
+    { text: "[ OK ] Mounted /dev/sda1 on /", delay: 200 },
+    { text: "[ OK ] Started Network Service", delay: 250 },
+    { text: "[ OK ] Securing firewall rules", delay: 250 },
+    { text: "[ OK ] Generating SSH keys", delay: 250 },
+    { text: "[ OK ] Starting user session (guest)", delay: 400 },
+    { text: "[ WARN ] Experimental features enabled", delay: 300 },
+    { text: "[ OK ] MOTD loaded", delay: 200 },
+    { text: "", delay: 500 },
+    { text: "Welcome, guest. Type 'help' to get started.", delay: 300 }
+];
+
+
+        // ===================================================================================
+        // CORE LOGIC - You probably don't need to edit below this line
+        // ===================================================================================
+
+        const bootSequenceContainer = document.getElementById('boot-sequence');
+        const terminalContainer = document.getElementById('terminal');
+        const output = document.getElementById('output');
+        const input = document.getElementById('command-input');
+        const promptEl = document.getElementById('prompt');
+        
+        let commandHistory = [];
+        let historyIndex = -1;
+        let isAdmin = false;
+        const typingDelay = 10;
+
+        // --- GEMINI API INTEGRATION ---
+        const callGemini = async (prompt) => {
+            const apiKey = ""; // This will be provided by the runtime environment
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    return `Error: API request failed with status ${response.status}. Please check the console for more details.`;
+                }
+
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                
+                return text || "Error: Could not extract a valid response from the AI.";
+            } catch (error) {
+                console.error("Gemini API call error:", error);
+                return "Error: Could not connect to the AI service. Please check your network connection.";
+            }
+        };
+        // --- END GEMINI API ---
+
+        const scrollToBottom = () => {
+            const container = document.getElementById('terminal-container');
+            container.scrollTop = container.scrollHeight;
+        };
+
+        const type = async (text, options = {}) => {
+            const { isHTML = false, instant = false, container = output } = options;
+        
+            const line = document.createElement('div');
+            line.classList.add('output-line');
+            container.appendChild(line);
+
+            const content = isHTML ? text : text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            
+            if (instant) {
+                line.innerHTML = content;
+                scrollToBottom();
+                return;
+            }
+            
+            const tempContainer = document.createElement('div');
+            tempContainer.innerHTML = content;
+            const textToType = tempContainer.textContent || '';
+            
+            for (let i = 0; i < textToType.length; i++) {
+                line.textContent = textToType.substring(0, i + 1);
+                scrollToBottom();
+                await new Promise(r => setTimeout(r, typingDelay));
+            }
+            
+            if (isHTML) {
+                line.innerHTML = content;
+            }
+            scrollToBottom();
+        };
+
+        const showUserCommand = (command) => {
+            const line = document.createElement('div');
+            line.innerHTML = `<span class="prompt">${promptEl.textContent}</span> ${command}`;
+            output.appendChild(line);
+        };
+
+        const handleCommand = async (commandStr) => {
+            const [command, ...args] = commandStr.trim().split(/\s+/);
+            const cmd = command ? command.toLowerCase() : '';
+
+            switch (cmd) {
+                case 'help':
+                    await type("Available commands:");
+                    await type(`
+  whoami          - Whats a Veer
+  social          - Display my social media links
+  email           - Open my email address
+  resume          - Link to my downloadable resume
+  scan            - Scan for my 'open ports' (skills)
+  ls              - List files in a directory (try 'ls projects')
+  cat             - Display content of a file (try 'cat projects/portfolio-v1.js')
+  weather         - Show weather for a city (e.g., 'weather Mumbai')
+  motd            - Display a random message of the day
+  geoip           - Show your approximate location
+  banner          - Generate an ASCII art banner from text
+  theme           - Change terminal theme (e.g., 'theme amber')
+  date            - Show the current system time
+  clear           - Clears screen
+  secret          - ;)
+  echo            - Make Veer say something
+  -- AI Commands --
+  ask             - Ask the AI a question (e.g., 'ask what is XSS')
+  suggest project - Get an AI-powered project suggestion`, { instant: true });
+                    if (isAdmin) {
+                        await type(`  sudo            - Relinquish root privileges`, { instant: true });
+                    }
+                    break;
+                case 'whoami':
+                    await type(`${portfolioData.name} - ${portfolioData.role}`);
+                    await type(portfolioData.tagline);
+                    break;
+                case 'email':
+                    await type(`Opening email client for ${portfolioData.email}...`);
+                    window.location.href = `mailto:${portfolioData.email}`;
+                    break;
+                case 'resume':
+                    await type(`You can download my resume here: <a href="${portfolioData.resumeLink}" target="_blank">${portfolioData.resumeLink}</a>`, { isHTML: true });
+                    break;
+                case 'scan':
+                    await type("Starting nmap scan against localhost...");
+                    await new Promise(r => setTimeout(r, 1000));
+                    await type("PORT\tSTATE\tSERVICE\t\tDESCRIPTION");
+                    for (const skill of portfolioData.skillsForScan) {
+                         await type(`${skill.port}/tcp\topen\t${skill.service}\t\t${skill.description}`);
+                         await new Promise(r => setTimeout(r, 50));
+                    }
+                    break;
+                case 'social':
+                    await type("You can find me on:");
+                    for (const [site, link] of Object.entries(portfolioData.social)) {
+                        await type(`- ${site}: <a href="${link}" target="_blank">${link}</a>`, { isHTML: true });
+                    }
+                    break;
+                case 'ls':
+                    if (!args[0] || args[0] !== 'projects') {
+                        await type("Usage: ls projects");
+                    } else {
+                        await type(Object.keys(portfolioData.projects).join('\n'));
+                    }
+                    break;
+                case 'cat':
+                    const filePath = args[0];
+                    if (!filePath || !filePath.startsWith('projects/')) {
+                        await type("Usage: cat projects/[project_name]");
+                        break;
+                    }
+                    const fileName = filePath.split('/')[1];
+                    const project = portfolioData.projects[fileName];
+                    if (project) {
+                        await type(`Project: ${fileName}`);
+                        await type(`Description: ${project.description}`);
+                        await type(`Link: <a href="${project.link}" target="_blank">${project.link}</a>`, { isHTML: true });
+                    } else {
+                        await type(`cat: ${filePath}: No such file or directory`);
+                    }
+                    break;
+                case 'weather':
+                    const city = args.join(' ');
+                    if (!city) {
+                        await type("Usage: weather [city]");
+                        break;
+                    }
+                    await type(`Fetching weather for ${city}...`);
+                    try {
+                        const response = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=3`);
+                        if (response.ok) {
+                            const weatherData = await response.text();
+                             await type(weatherData);
+                        } else {
+                            await type(`Could not retrieve weather for ${city}.`);
+                        }
+                    } catch (error) {
+                         await type("Weather service is unavailable.");
+                    }
+                    break;
+                case 'motd':
+                    const randomMotd = portfolioData.motd[Math.floor(Math.random() * portfolioData.motd.length)];
+                    await type(randomMotd);
+                    break;
+                case 'banner':
+                    const textToBanner = args.join(' ');
+                    if (!textToBanner) {
+                        await type("Usage: banner [text]");
+                        break;
+                    }
+                    const bannerText = generateBanner(textToBanner);
+                    await type(bannerText, { instant: true });
+                    break;
+                case 'geoip':
+                    await type("Pinging geolocation service...");
+                    try {
+                        const response = await fetch('https://ipinfo.io/json');
+                        const data = await response.json();
+                        if (data.city) {
+                            await type(`Location: ${data.city}, ${data.region}, ${data.country}`);
+                            await type(`ISP: ${data.org}`);
+                        } else {
+                            await type("Could not retrieve location data.");
+                        }
+                    } catch (error) {
+                        await type("Geolocation service is unavailable.");
+                    }
+                    break;
+                case 'date':
+                    await type(new Date().toString());
+                    break;
+                case 'echo':
+                    await type(args.join(' '));
+                    break;
+                case 'clear':
+                    output.innerHTML = '';
+                    break;
+                case 'theme':
+                    const themeName = args[0];
+                    if (!themeName) {
+                        await type("Usage: theme [theme_name]");
+                        await type(`Available themes: ${Object.keys(portfolioData.themes).join(', ')}`);
+                        break;
+                    }
+                    const theme = portfolioData.themes[themeName];
+                    if (theme) {
+                        for (const [key, value] of Object.entries(theme)) {
+                            document.documentElement.style.setProperty(key, value);
+                        }
+                        await type(`Theme set to ${themeName}.`);
+                    } else {
+                        await type(`Theme '${themeName}' not found.`);
+                    }
+                    break;
+                case 'secret':
+                    await type(portfolioData.secret.hint);
+                    break;
+                case portfolioData.secret.puzzleCommand:
+                    await type(portfolioData.secret.solution, { instant: true });
+                    break;
+                case 'sudo':
+                    if(args[0] === 'root' && !isAdmin){
+                        isAdmin = true;
+                        promptEl.textContent = 'root@portfolio:~#';
+                        await type("Root privileges granted. Handle with care.");
+                    } else if (isAdmin) {
+                        isAdmin = false;
+                        promptEl.textContent = 'user@portfolio:~$';
+                        await type("Root privileges relinquished.");
+                    } else {
+                        await type("sudo: permission denied");
+                    }
+                    break;
+                case 'ask':
+                    const question = args.join(' ');
+                    if (!question) {
+                        await type("Usage: ask [your question]");
+                        break;
+                    }
+                    await type("Consulting the oracle...");
+                    const answer = await callGemini(question);
+                    await type(answer);
+                    break;
+                case 'suggest':
+                     if (args[0] !== 'project') {
+                        await type("Usage: suggest project");
+                        break;
+                    }
+                    await type("Asking the AI for a project idea...");
+                    const suggestionPrompt = `Suggest a unique and impressive portfolio project for a ${portfolioData.role}. The project should be achievable but demonstrate key skills. Provide a short concept and key features.`;
+                    const suggestion = await callGemini(suggestionPrompt);
+                    await type(suggestion);
+                    break;
+                case '':
+                    break;
+                default:
+                    await type(`bash: command not found: ${cmd}`);
+                    break;
+            }
+        };
+
+        input.addEventListener('keydown', async (e) => {
+            if (e.key === 'Enter') {
+                const commandStr = input.value;
+                showUserCommand(commandStr);
+                
+                if (commandStr.trim() !== '') {
+                    commandHistory.unshift(commandStr);
+                }
+                historyIndex = -1;
+                
+                input.value = '';
+                await handleCommand(commandStr);
+                scrollToBottom();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    input.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = -1;
+                    input.value = '';
+                }
+            }
+        });
+        
+        const init = async () => {
+            for(const line of bootLog) {
+                const p = document.createElement('p');
+                p.classList.add('output-line');
+                bootSequenceContainer.appendChild(p);
+                for(let i = 0; i < line.text.length; i++) {
+                    p.textContent += line.text[i];
+                    await new Promise(r => setTimeout(r, 2));
+                }
+                await new Promise(r => setTimeout(r, line.delay));
+            }
+
+            bootSequenceContainer.style.display = 'none';
+            terminalContainer.style.display = 'block';
+            
+            await type(portfolioData.initialBanner, { instant: true });
+            
+            await type(`Session ready. Type 'help' to continue.`);
+            input.focus();
+        };
+
+        init();
+    </script>
+</body>
+</html>
+
