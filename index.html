@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veer | Space</title>
-    <meta name="description" content="my shell :3">
+    <title>Veer | myshell</title>
+    <meta name="description" content="welcome to my space on the internet :3">
 
     <!-- Embedded CSS for styling -->
     <style>
@@ -93,14 +93,15 @@
             color: var(--text-color);
             font-family: var(--font-family);
             font-size: inherit;
-            flex-grow: 1;
             outline: none;
             caret-color: transparent; /* Hides the default cursor */
+            width: 1ch; /* Start with a small width */
+            padding: 0; /* Remove default padding */
         }
 
         /* Custom blinking cursor */
         .cursor {
-            width: 10px;
+            width: 8px; /* Made the cursor slightly thinner */
             height: 1.2em;
             background-color: var(--text-color);
             display: inline-block;
@@ -134,7 +135,7 @@
         <div id="terminal" style="display: none;">
             <div id="output"></div>
             <div class="input-line">
-                <span class="prompt" id="prompt">guest@system:~$</span>
+                <span class="prompt" id="prompt">user@portfolio:~$</span>
                 <input type="text" id="command-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
                 <span class="cursor"></span>
             </div>
@@ -198,7 +199,7 @@
             role: "a bug fixer & a bug creator",
             tagline: `
 interests: hacking, coding, caffeine
-motto: "$sudo make it work"
+motto: "sudo make it work"
 `,
             email: "veer.sanghvi@example.com", 
             resumeLink: "your_resume.pdf", 
@@ -215,7 +216,7 @@ motto: "$sudo make it work"
                 { port: 8080, service: 'Proxy', description: 'Burp Suite & Web Proxies' },
             ],
             projects: {
-                "portfolio-v1.js": {
+                "shell.js": {
                     description: "This very terminal you're using! Built with vanilla JS, HTML, and CSS to be lightweight and fast.",
                     link: "https://github.com/veersanghvi/terminal-portfolio"
                 },
@@ -295,37 +296,6 @@ Congratulations, elite hacker! You found the secret.
         let isAdmin = false;
         const typingDelay = 10;
 
-        // --- GEMINI API INTEGRATION ---
-        const callGemini = async (prompt) => {
-            const apiKey = ""; // This will be provided by the runtime environment
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }]
-            };
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    return `Error: API request failed with status ${response.status}. Please check the console for more details.`;
-                }
-
-                const result = await response.json();
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                
-                return text || "Error: Could not extract a valid response from the AI.";
-            } catch (error) {
-                console.error("Gemini API call error:", error);
-                return "Error: Could not connect to the AI service. Please check your network connection.";
-            }
-        };
-        // --- END GEMINI API ---
-
         const scrollToBottom = () => {
             const container = document.getElementById('terminal-container');
             container.scrollTop = container.scrollHeight;
@@ -376,25 +346,22 @@ Congratulations, elite hacker! You found the secret.
                 case 'help':
                     await type("Available commands:");
                     await type(`
-  whoami          - Whats a Veer
-  social          - Display my social media links
-  email           - Open my email address
-  resume          - Link to my downloadable resume
-  scan            - Scan for my 'open ports' (skills)
-  ls              - List files in a directory (try 'ls projects')
-  cat             - Display content of a file (try 'cat projects/portfolio-v1.js')
-  weather         - Show weather for a city (e.g., 'weather Mumbai')
-  motd            - Display a random message of the day
-  geoip           - Show your approximate location
-  banner          - Generate an ASCII art banner from text
-  theme           - Change terminal theme (e.g., 'theme amber')
-  date            - Show the current system time
-  clear           - Clears screen
+  whoami          - whats a Veer
+  social          - display my social media links
+  email           - open my email address
+  resume          - link to my downloadable resume
+  scan            - scan for my 'open ports' (skills)
+  ls              - list files in a directory (try 'ls projects')
+  cat             - display content of a file (try 'cat projects/shell.js')
+  weather         - show weather for a city (e.g., 'weather Mumbai')
+  motd            - display a random message of the day
+  geoip           - show your approximate location
+  banner          - generate an ASCII art banner from text
+  theme           - change terminal theme (e.g., 'theme amber')
+  date            - show the current system time
+  clear           - clears screen
   secret          - ;)
-  echo            - Make Veer say something
-  -- AI Commands --
-  ask             - Ask the AI a question (e.g., 'ask what is XSS')
-  suggest project - Get an AI-powered project suggestion`, { instant: true });
+  echo            - make Veer say something`, { instant: true });
                     if (isAdmin) {
                         await type(`  sudo            - Relinquish root privileges`, { instant: true });
                     }
@@ -540,26 +507,6 @@ Congratulations, elite hacker! You found the secret.
                         await type("sudo: permission denied");
                     }
                     break;
-                case 'ask':
-                    const question = args.join(' ');
-                    if (!question) {
-                        await type("Usage: ask [your question]");
-                        break;
-                    }
-                    await type("Consulting the oracle...");
-                    const answer = await callGemini(question);
-                    await type(answer);
-                    break;
-                case 'suggest':
-                     if (args[0] !== 'project') {
-                        await type("Usage: suggest project");
-                        break;
-                    }
-                    await type("Asking the AI for a project idea...");
-                    const suggestionPrompt = `Suggest a unique and impressive portfolio project for a ${portfolioData.role}. The project should be achievable but demonstrate key skills. Provide a short concept and key features.`;
-                    const suggestion = await callGemini(suggestionPrompt);
-await type(suggestion);
-                    break;
                 case '':
                     break;
                 default:
@@ -567,6 +514,13 @@ await type(suggestion);
                     break;
             }
         };
+        
+        // This new listener fixes the cursor position by resizing the input field
+        input.addEventListener('input', () => {
+            const minWidth = 1;
+            const newWidth = Math.max(minWidth, input.value.length) + 1;
+            input.style.width = `${newWidth}ch`;
+        });
 
         input.addEventListener('keydown', async (e) => {
             if (e.key === 'Enter') {
@@ -579,6 +533,7 @@ await type(suggestion);
                 historyIndex = -1;
                 
                 input.value = '';
+                input.style.width = '1ch'; // Reset width after command execution
                 await handleCommand(commandStr);
                 scrollToBottom();
             } else if (e.key === 'ArrowUp') {
@@ -586,6 +541,8 @@ await type(suggestion);
                 if (historyIndex < commandHistory.length - 1) {
                     historyIndex++;
                     input.value = commandHistory[historyIndex];
+                    // Trigger the input event to resize the field correctly
+                    input.dispatchEvent(new Event('input'));
                 }
             } else if (e.key === 'ArrowDown') {
                 e.preventDefault();
@@ -596,6 +553,8 @@ await type(suggestion);
                     historyIndex = -1;
                     input.value = '';
                 }
+                // Trigger the input event to resize the field correctly
+                input.dispatchEvent(new Event('input'));
             }
         });
         
@@ -624,4 +583,5 @@ await type(suggestion);
     </script>
 </body>
 </html>
+
 
