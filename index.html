@@ -208,49 +208,65 @@ motto: "sudo make it work"
                 linkedin: "https://linkedin.com/in/veer-sanghvii",
             },
             skillsForScan: [
-                { port: 22, service: 'SSH', description: 'Secure Shell, Linux Hardening & Bash Scripting' },
-                { port: 80, service: 'HTTP', description: 'Web Security, Vulnerability Assessment' },
-                { port: 443, service: 'HTTPS', description: 'Encryption, TLS, Network Defense' },
-                { port: 8080, service: 'Proxy', description: 'Burp Suite, OWASP Testing, Web Proxies' },
-                { port: 3389, service: 'RDP', description: 'Red Teaming & Lateral Movement Tactics' },
-                { port: 9200, service: 'Elasticsearch', description: 'Log Analysis & Incident Response' },
-                { port: 5601, service: 'Kibana', description: 'Visualization & Threat Hunting' },
-                { port: 9997, service: 'Splunk-Forwarder', description: 'SIEM, Log Monitoring, Threat Detection' },
-                { port: 5000, service: 'Cloud', description: 'AWS | Azure | GCP Security & IAM Hardening' },
-                { port: 4444, service: 'Metasploit', description: 'Exploitation Framework & CTF Practice' },
-                { port: 1337, service: 'CTF', description: 'Capture the Flag Challenges & Problem Solving' },
-                { port: 1999, service: 'Forensics', description: 'Disk Imaging, Memory Analysis, File Carving' },
-                { port: 7777, service: 'Custom', description: 'Threat Simulation & Adversary Emulation' },
+                { port: 22, service: 'SSH', description: 'secure shell, linux hardening & bash scripting' },
+                { port: 80, service: 'HTTP', description: 'web security, vulnerability assessment' },
+                { port: 443, service: 'HTTPS', description: 'encryption, tls, network defense' },
+                { port: 8080, service: 'Proxy', description: 'burp suite, owasp testing, web proxies' },
+                { port: 3389, service: 'RDP', description: 'red teaming & lateral movement tactics' },
+                { port: 9200, service: 'Elasticsearch', description: 'log analysis & incident response' },
+                { port: 5601, service: 'Kibana', description: 'visualization & threat hunting' },
+                { port: 9997, service: 'Splunk-Forwarder', description: 'siem, log monitoring, threat detection' },
+                { port: 5000, service: 'Cloud', description: 'aws | azure | gcp security & iam hardening' },
+                { port: 4444, service: 'Metasploit', description: 'exploitation framework & ctf practice' },
+                { port: 1337, service: 'CTF', description: 'capture the flag challenges & problem solving' },
+                { port: 1999, service: 'Forensics', description: 'disk imaging, memory analysis, file carving' },
+                { port: 7777, service: 'Custom', description: 'threat simulation & adversary emulation' },
             ],
             projects: {
                 "shell.js": {
-                    description: "This very terminal you're using! Built with vanilla JS, HTML, and CSS to be lightweight and fast.",
+                    description: "this very terminal you're using right now. wanted something that felt like home—no frameworks, just vanilla js and some css magic. learned a lot about terminal emulation and keyboard handling while building it.",
                     link: "https://github.com/veersanghvi/terminal-portfolio"
                 },
                 "secure-api.py": {
-                    description: "A Python-based REST API with JWT authentication and rate limiting for a secure user management system.",
+                    description: "built this to learn proper api security the hard way. implements jwt, rate limiting, and input validation. realized how easy it is to mess up auth if you're not careful—this project taught me that.",     
                     link: "https://github.com/veersanghvi/secure-api"
                 },
                 "log-analyzer.sh": {
-                    description: "A bash script that parses server logs to detect and report potential intrusion attempts.",
+                    description: "bash script i wrote after spending way too long manually parsing logs. detects suspicious patterns and saves hours of grepping. probably saved me more time than i spent building it.",
                     link: "https://github.com/veersanghvi/log-analyzer"
                 }
             },
+            research: [
+                {
+                    title: "Detecting and Remediating Cloud Infrastructure Misconfigurations Using Large Language Models on Infrastructure-as-Code",
+                    description: "explored using large language models to catch infrastructure misconfiguration bugs. turns out it's a solid approach",
+                    link: "https://www.irjet.net/archives/V12/i12/IRJET-V12I1253.pdf"
+                }
+            ],
             motd: [
                 "The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room with armed guards - and even then I have my doubts. - Gene Spafford",
                 "Privacy is not an option, and it shouldn't be the price we accept for just getting on the Internet. - Gary Kovacs",
                 "Fun fact: The first computer virus, 'Creeper', was created in 1971 and was designed to move between TENEX terminals, displaying the message 'I'm the creeper, catch me if you can!'"
             ],
             secret: {
-                hint: "Sometimes, the oldest tricks are the best. Try looking for something that is both up and down, but never moves.",
-                puzzleCommand: "eend",
+                hint: "they say the best passwords are the ones you can't remember. try reversing your thoughts.",
+                puzzleCommand: "drowssap",
                 solution: `
-  _  _  __  _  _  ____  __  __ _  ____ 
- ( \\/ )(  )( \\/ )(  _ \\(  )(  ( \\(  __)
-  )  (  )( / \\/ \\ ) __/ )( /    / ) _) 
- (_/\\_)(__)\\_)(_/(__)  (__)\\_)__)(____)
+  ██╗   ██╗ ██████╗ ██╗   ██╗    ███████╗ ██████╗ ██╗   ██╗███╗   ██╗██████╗ 
+  ╚██╗ ██╔╝██╔═══██╗██║   ██║    ██╔════╝██╔═══██╗██║   ██║████╗  ██║██╔══██╗
+   ╚████╔╝ ██║   ██║██║   ██║    █████╗  ██║   ██║██║   ██║██╔██╗ ██║██║  ██║
+    ╚██╔╝  ██║   ██║██║   ██║    ██╔══╝  ██║   ██║██║   ██║██║╚██╗██║██║  ██║
+     ██║   ╚██████╔╝╚██████╔╝    ██║     ╚██████╔╝╚██████╔╝██║ ╚████║██████╔╝
+     ╚═╝    ╚═════╝  ╚═════╝     ╚═╝      ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═════╝ 
+                                                                              
+                    the secret!
 
-Congratulations, elite hacker! You found the secret.
+                    congrats, you figured it out. 
+                    the hint was literally in the command—'password' backwards.
+                    if breaking into systems was this easy, we'd all be in trouble.
+                    
+                    fun fact: 'password' is still one of the most common passwords.
+                    please don't use it. ever. seriously.
 `
             },
             themes: {
@@ -358,6 +374,7 @@ Congratulations, elite hacker! You found the secret.
   email           - open my email address
   resume          - link to my downloadable resume
   articles        - view/open my article on Google Drive
+  research        - check out some research i've done
   scan            - scan for my 'open ports' (skills)
   ls              - list files in a directory (try 'ls projects')
   cat             - display content of a file (try 'cat projects/shell.js')
@@ -402,6 +419,18 @@ Congratulations, elite hacker! You found the secret.
                         await type(`- Google Drive: <a href="${articleLink}" target="_blank" rel="noopener noreferrer">View Article</a>`, { isHTML: true });
                         break;
                     }
+                case 'research':
+                    if (portfolioData.research.length === 0) {
+                        await type("No research yet.");
+                        break;
+                    }
+                    await type("Research:");
+                    for (const pub of portfolioData.research) {
+                        await type(`- ${pub.title}`);
+                        await type(`  ${pub.description}`);
+                        await type(`  Link: <a href="${pub.link}" target="_blank" rel="noopener noreferrer">${pub.link}</a>`, { isHTML: true });
+                    }
+                    break;
                 case 'scan':
                     await type("Starting nmap scan against localhost...");
                     await new Promise(r => setTimeout(r, 1000));
