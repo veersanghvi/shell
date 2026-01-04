@@ -373,7 +373,6 @@ motto: "sudo make it work"
   social          - display my social media links
   email           - open my email address
   resume          - link to my downloadable resume
-  articles        - view/open my article on Google Drive
   research        - check out some research i've done
   scan            - scan for my 'open ports' (skills)
   ls              - list files in a directory (try 'ls projects')
@@ -402,23 +401,6 @@ motto: "sudo make it work"
                 case 'resume':
                     await type(`You can download my resume here: <a href="${portfolioData.resumeLink}" target="_blank">${portfolioData.resumeLink}</a>`, { isHTML: true });
                     break;
-                case 'articles':
-                    {
-                        const articleLink = 'https://drive.google.com/file/d/1y6m4cX8TrIYc4nMTxTKZ4dfO9y2qrKIN/view?usp=sharing';
-                        if (args[0] && args[0].toLowerCase() === 'open') {
-                            await type('Opening article in Google Drive...');
-                            try {
-                                window.open(articleLink, '_blank', 'noopener,noreferrer');
-                            } catch (e) {
-                                // Fallback: present the link
-                            }
-                        } else {
-                            await type("Articles:");
-                            await type("Use 'articles open' or click the link below:");
-                        }
-                        await type(`- Google Drive: <a href="${articleLink}" target="_blank" rel="noopener noreferrer">View Article</a>`, { isHTML: true });
-                        break;
-                    }
                 case 'research':
                     if (portfolioData.research.length === 0) {
                         await type("No research yet.");
