@@ -243,6 +243,13 @@ motto: "sudo make it work"
                     link: "https://www.irjet.net/archives/V12/i12/IRJET-V12I1253.pdf"
                 }
             ],
+            articles: [
+                {
+                    title: "CNS SLA1 - Zero Trust Architecture: Redefining Security in the Modern Network",
+                    description: "a self-learning article on zero trust architecture covering its principles, cryptographic foundations, and real-world relevance. written for CSCER1PC305.",
+                    link: "CNS SLA1.docx"
+                }
+            ],
             motd: [
                 "The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a lead-lined room with armed guards - and even then I have my doubts. - Gene Spafford",
                 "Privacy is not an option, and it shouldn't be the price we accept for just getting on the Internet. - Gary Kovacs",
@@ -374,6 +381,7 @@ motto: "sudo make it work"
   email           - open my email address
   resume          - link to my downloadable resume
   research        - check out some research i've done
+  articles        - read articles i've written
   scan            - scan for my 'open ports' (skills)
   ls              - list files in a directory (try 'ls projects')
   cat             - display content of a file (try 'cat projects/shell.js')
@@ -411,6 +419,18 @@ motto: "sudo make it work"
                         await type(`- ${pub.title}`);
                         await type(`  ${pub.description}`);
                         await type(`  Link: <a href="${pub.link}" target="_blank" rel="noopener noreferrer">${pub.link}</a>`, { isHTML: true });
+                    }
+                    break;
+                case 'articles':
+                    if (portfolioData.articles.length === 0) {
+                        await type("No articles yet.");
+                        break;
+                    }
+                    await type("Articles:");
+                    for (const article of portfolioData.articles) {
+                        await type(`- ${article.title}`);
+                        await type(`  ${article.description}`);
+                        await type(`  Download: <a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.link}</a>`, { isHTML: true });
                     }
                     break;
                 case 'scan':
