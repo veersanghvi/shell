@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS CloudWatch – Cloud Infrastructure Self Learning Activity</title>
+  <meta
+    name="description"
+    content="A visual self-learning article about AWS CloudWatch covering key features, how it works, and real-life applications."
+  />
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: rgba(255, 255, 255, 0.86);
+      --ink: #0f172a;
+      --muted: #52607a;
+      --accent: #0f4b8f;
+      --shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(15, 75, 143, 0.12), transparent 32%),
+        radial-gradient(circle at top right, rgba(236, 72, 153, 0.08), transparent 28%),
+        linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      padding: 32px 20px 56px;
+    }
+
+    .page {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: rgba(15, 75, 143, 0.08);
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+    }
+
+    h1 {
+      margin: 16px 0 10px;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+    }
+
+    .intro {
+      max-width: 58ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.7;
+    }
+
+    .meta {
+      justify-self: end;
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      color: var(--muted);
+      max-width: 360px;
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .meta strong { color: var(--ink); }
+
+    .back-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .gallery {
+      display: grid;
+      gap: 22px;
+    }
+
+    figure {
+      margin: 0;
+      padding: 18px;
+      background: var(--panel);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    figure img {
+      width: 100%;
+      display: block;
+      border-radius: 18px;
+    }
+
+    figcaption {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .meta {
+        justify-self: start;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">AWS CloudWatch</div>
+        <h1>AWS CloudWatch – Cloud Infrastructure Self Learning Activity</h1>
+        <p class="intro">
+          A visual walkthrough of AWS CloudWatch covering the core concepts from the learning activity:
+          what it does, how the service works, its key features, and where it matters in real deployments.
+        </p>
+      </div>
+      <aside class="meta">
+        <strong>Open from the portfolio:</strong> the homepage now links to this article from the research section.
+        <div style="margin-top: 12px;">
+          <a class="back-link" href="../../index.html">Return to home</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="gallery" aria-label="CloudWatch slide images">
+      <figure>
+        <img src="slide-01.svg" alt="Amazon CloudWatch overview slide" />
+        <figcaption>
+          Slide 01: what CloudWatch is and why it acts as the eyes and ears of AWS infrastructure.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="slide-02.svg" alt="CloudWatch key features slide" />
+        <figcaption>
+          Slide 02: the key features that matter most, including metrics, logs, alarms, and dashboards.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="slide-03.svg" alt="How CloudWatch works slide" />
+        <figcaption>
+          Slide 03: how CloudWatch moves from data sources to actions through monitoring and automation.
+        </figcaption>
+      </figure>
+
+      <figure>
+        <img src="slide-04.svg" alt="CloudWatch real-life applications slide" />
+        <figcaption>
+          Slide 04: practical applications, cost control, compliance, and a use case showing alerting and scaling.
+        </figcaption>
+      </figure>
+    </section>
+  </main>
+</body>
+</html>
