@@ -238,17 +238,17 @@ motto: "sudo make it work"
             },
             research: [
                 {
-                    title: "AWS CloudWatch – Cloud Infrastructure Self Learning Activity",
-                    description: "a standalone article page that presents the cloudwatch self-learning activity as a visual walkthrough with the slide set.",
-                    link: "articles/aws-cloudwatch-self-learning-activity/index.html"
-                },
-                {
                     title: "Detecting and Remediating Cloud Infrastructure Misconfigurations Using Large Language Models on Infrastructure-as-Code",
                     description: "explored using large language models to catch infrastructure misconfiguration bugs. turns out it's a solid approach",
                     link: "https://www.irjet.net/archives/V12/i12/IRJET-V12I1253.pdf"
                 }
             ],
             articles: [
+                {
+                    title: "CI_SLA1",
+                    description: "AWS CloudWatch – Cloud Infrastructure Self Learning Activity presented as a visual article with a redirect link.",
+                    link: "articles/aws-cloudwatch-self-learning-activity/index.html"
+                },
                 {
                     title: "CNS SLA1 - Zero Trust Architecture: Redefining Security in the Modern Network",
                     description: "a self-learning article on zero trust architecture covering its principles, cryptographic foundations, and real-world relevance. written for CSCER1PC305.",
@@ -450,7 +450,7 @@ motto: "sudo make it work"
                     for (const article of portfolioData.articles) {
                         await type(`- ${article.title}`);
                         await type(`  ${article.description}`);
-                        await type(`  Download: <a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.link}</a>`, { isHTML: true });
+                        await type(`  Redirect: <a href="${article.link}" target="_blank" rel="noopener noreferrer">${article.link}</a>`, { isHTML: true });
                     }
                     break;
                 case 'scan':
